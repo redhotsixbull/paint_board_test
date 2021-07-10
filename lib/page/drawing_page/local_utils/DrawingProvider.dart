@@ -9,19 +9,9 @@ class DrawingProvider extends ChangeNotifier {
 
   double get size => _size;
 
-  set changeSize(double size) {
-    _size = size;
-    notifyListeners();
-  }
-
   Color _color = Colors.black;
 
   Color get color => _color;
-
-  set changeColor(Color color) {
-    _color = color;
-    notifyListeners();
-  }
 
   bool _eraseMode = false;
 
