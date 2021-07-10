@@ -1,0 +1,125 @@
+import 'package:flutter/material.dart';
+import 'package:paint_board_test/res/theme_data.dart';
+
+class ControlBar extends StatefulWidget {
+  const ControlBar({Key key}) : super(key: key);
+
+  @override
+  _ControlBarState createState() => _ControlBarState();
+}
+
+class _ControlBarState extends State<ControlBar> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 60,
+      color: Colors.grey[300],
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: _saveAndLoadButtonGroup(),
+          ),
+          Expanded(
+            flex: 1,
+            child: _setBackGroundImageButton(),
+          ),
+          Expanded(
+            flex: 1,
+            child: _backwardAndForward(),
+          ),
+          Expanded(
+            flex: 1,
+            child: _penAndEraser(),
+          )
+        ],
+      ),
+    );
+  }
+
+  _saveAndLoadButtonGroup() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          controlTextButton(title: "SAVE"),
+          controlTextButton(title: "LOAD"),
+        ],
+      ),
+    );
+  }
+
+  _setBackGroundImageButton() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          controlTextButton(title: "ADD"),
+        ],
+      ),
+    );
+  }
+
+  _backwardAndForward() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          controlIconButton(
+              icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          )),
+          controlIconButton(
+              icon: Icon(
+            Icons.arrow_forward,
+            color: Colors.white,
+          )),
+        ],
+      ),
+    );
+  }
+
+  _penAndEraser() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          controlTextButton(title: "PEN"),
+          controlTextButton(title: "ERASE"),
+        ],
+      ),
+    );
+  }
+
+  controlTextButton({String title}) {
+    if (title == null) title = "";
+
+    return Container(
+      decoration: boxTheme.basicOutlineGreyBox,
+      height: 40,
+      width: 40,
+      child: Center(
+        child: Text(
+          title,
+          style: textTheme.basicTextStyle,
+        ),
+      ),
+    );
+  }
+
+  controlIconButton({Icon icon}) {
+    bool isIcon = true;
+    if (icon == null) isIcon = false;
+
+    return Container(
+      decoration: boxTheme.basicOutlineGreyBox,
+      height: 40,
+      width: 40,
+      child: Center(
+        child: isIcon ? icon : Container(),
+      ),
+    );
+  }
+}
