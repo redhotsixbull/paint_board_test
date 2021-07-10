@@ -16,26 +16,69 @@ class _ControlBarState extends State<ControlBar> {
       height: 80,
       color: Colors.grey[300],
       child: Row(
+        children: [saveAndLoadButtonGroup()],
+      ),
+    );
+  }
+
+  saveAndLoadButtonGroup() {
+    return Container(
+      child: Row(
         children: [
-       
+          controlTextButton(title: "SAVE"),
+          controlTextButton(title: "LOAD"),
         ],
       ),
     );
   }
 
-  controlButton({String title}){
-    if(title==null) title = "";
+  setBackGroundImage() {
+    return Container(
+      child: Row(
+        children: [
+          controlTextButton(title: "ADD"),
+        ],
+      ),
+    );
+  }
+
+  backwardAndForward() {
+    return Container(
+      child: Row(
+        children: [
+          controlTextButton(title: "ADD"),
+        ],
+      ),
+    );
+  }
+
+  controlTextButton({String title}) {
+    if (title == null) title = "";
+
     return Container(
       decoration: boxTheme.basicOutlineGreyBox,
       height: 60,
       width: 60,
       child: Center(
         child: Text(
-          title
+          title,
+          style: textTheme.basicTextStyle,
         ),
       ),
     );
   }
+
+  controlIconButton({Icon icon}) {
+    bool isIcon = true;
+    if (icon == null) isIcon = false;
+
+    return Container(
+      decoration: boxTheme.basicOutlineGreyBox,
+      height: 60,
+      width: 60,
+      child: Center(
+        child: isIcon?icon:Container(),
+      ),
+    );
+  }
 }
-
-
