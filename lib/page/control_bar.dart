@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paint_board_test/res/theme_data.dart';
+import 'package:provider/provider.dart';
+
+import 'drawing_page/local_utils/DrawingProvider.dart';
 
 class ControlBar extends StatefulWidget {
   const ControlBar({Key key}) : super(key: key);
@@ -11,6 +14,8 @@ class ControlBar extends StatefulWidget {
 class _ControlBarState extends State<ControlBar> {
   @override
   Widget build(BuildContext context) {
+    var p = Provider.of<DrawingProvider>(context);
+
     return Container(
       width: double.infinity,
       height: 60,
@@ -19,26 +24,26 @@ class _ControlBarState extends State<ControlBar> {
         children: [
           Expanded(
             flex: 1,
-            child: _saveAndLoadButtonGroup(),
+            child: _saveAndLoadButtonGroup(p),
           ),
           Expanded(
             flex: 1,
-            child: _setBackGroundImageButton(),
+            child: _setBackGroundImageButton(p),
           ),
           Expanded(
             flex: 1,
-            child: _backwardAndForward(),
+            child: _backwardAndForward(p),
           ),
           Expanded(
             flex: 1,
-            child: _penAndEraser(),
+            child: _penAndEraser(p),
           )
         ],
       ),
     );
   }
 
-  _saveAndLoadButtonGroup() {
+  _saveAndLoadButtonGroup(DrawingProvider p) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -50,7 +55,7 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  _setBackGroundImageButton() {
+  _setBackGroundImageButton(DrawingProvider p) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -61,7 +66,7 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  _backwardAndForward() {
+  _backwardAndForward(DrawingProvider p) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -81,7 +86,7 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  _penAndEraser() {
+  _penAndEraser(DrawingProvider p) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
