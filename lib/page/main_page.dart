@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_board_test/page/paint_board.dart';
 
 import 'control_bar.dart';
 
@@ -15,7 +16,7 @@ class _MainPageState extends State<MainPage> {
         body: Column(
           children: [
             ControlBar(),
-
+            Expanded(flex: 1, child: PaintBoard()),
           ],
         ),
       ),
