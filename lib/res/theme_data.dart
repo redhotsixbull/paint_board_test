@@ -6,7 +6,12 @@ class BoxTheme {
       borderRadius: BorderRadius.circular(16));
 }
 
-class TextTheme {}
+class TextTheme {
+  final TextStyle basicTextStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.normal
+  );
+}
 
 final boxTheme = BoxTheme();
 final textTheme = TextTheme();
