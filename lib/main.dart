@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_board_test/page/drawing_page/local_utils/DrawingProvider.dart';
 import 'package:paint_board_test/page/main_page.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +8,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => null,
+          create: (_) => DrawingProvider(),
         ),
       ],
       child: MyApp(),
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home:
-          ChangeNotifierProvider(create: (context) => null, child: MainPage()),
+          ChangeNotifierProvider(create: (context) => DrawingProvider(), child: MainPage()),
     );
   }
 }

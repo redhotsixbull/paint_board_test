@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_board_test/page/paint_board.dart';
 
 import 'control_bar.dart';
 
@@ -14,8 +15,11 @@ class _MainPageState extends State<MainPage> {
       child: Scaffold(
         body: Column(
           children: [
-            ControlBar(),
-
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: ControlBar(),
+            ),
+            Expanded(child: PaintBoard()),
           ],
         ),
       ),
