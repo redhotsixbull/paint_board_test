@@ -29,14 +29,14 @@ class _PaintBoardState extends State<PaintBoard> {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onPanStart: (s) {
-            if(p.eraseMode){
+            if(p.getEraseMode){
               p.erase(s.localPosition);
             }else{
               p.drawStart(s.localPosition);
             }
           },
           onPanUpdate: (s) {
-            if(p.eraseMode){
+            if(p.getEraseMode){
               p.erase(s.localPosition);
             }else{
               p.drawing(s.localPosition);
