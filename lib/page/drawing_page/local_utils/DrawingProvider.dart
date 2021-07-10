@@ -1,9 +1,10 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:paint_board_test/models/DotInfo.dart';
 
 class DrawingProvider extends ChangeNotifier {
   final lines = <List<DotInfo>>[];
+
+  final temp = <List<DotInfo>>[];
 
   double _size = 3;
 
@@ -74,8 +75,21 @@ class DrawingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void backward(){
-    lines.removeLast();
-    notifyListeners();
+  void backward() {
+    if (lines.length > 0) {
+      temp.add(lines.last);
+      lines.removeLast();
+      print(lines.length);
+      notifyListeners();
+    }
+  }
+
+  void forward() {
+    if (temp.length > 0) {
+      lines.add(temp.last);
+      temp.removeLast();
+      print(temp.length);
+      notifyListeners();
+    }
   }
 }

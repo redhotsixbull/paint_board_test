@@ -185,9 +185,12 @@ class _ControlBarState extends State<ControlBar> {
       case PaintBoardAction.addBackGroundImage:
         break;
       case PaintBoardAction.backward:
+        print("back ward button");
         drawingProvider.backward();
         break;
       case PaintBoardAction.forward:
+        print("forward button");
+        drawingProvider.forward();
         break;
       case PaintBoardAction.pen:
         drawingProvider.pencilMode();
