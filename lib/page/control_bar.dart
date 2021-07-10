@@ -4,6 +4,16 @@ import 'package:provider/provider.dart';
 
 import 'drawing_page/local_utils/DrawingProvider.dart';
 
+enum ControlBarFunction {
+  save,
+  load,
+  addBackGroundImage,
+  backward,
+  forward,
+  pen,
+  erase
+}
+
 class ControlBar extends StatefulWidget {
   const ControlBar({Key key}) : super(key: key);
 
@@ -48,8 +58,14 @@ class _ControlBarState extends State<ControlBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          controlTextButton(title: "SAVE"),
-          controlTextButton(title: "LOAD"),
+          controlTextButton(
+              title: "SAVE",
+              drawingProvider: p,
+              controlBarFunction: ControlBarFunction.save),
+          controlTextButton(
+              title: "LOAD",
+              drawingProvider: p,
+              controlBarFunction: ControlBarFunction.load),
         ],
       ),
     );
@@ -60,7 +76,10 @@ class _ControlBarState extends State<ControlBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          controlTextButton(title: "ADD"),
+          controlTextButton(
+              title: "ADD",
+              drawingProvider: p,
+              controlBarFunction: ControlBarFunction.addBackGroundImage),
         ],
       ),
     );
@@ -73,14 +92,18 @@ class _ControlBarState extends State<ControlBar> {
         children: [
           controlIconButton(
               icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          )),
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+              drawingProvider: p,
+              controlBarFunction: ControlBarFunction.backward),
           controlIconButton(
               icon: Icon(
-            Icons.arrow_forward,
-            color: Colors.white,
-          )),
+                Icons.arrow_forward,
+                color: Colors.white,
+              ),
+              drawingProvider: p,
+              controlBarFunction: ControlBarFunction.forward),
         ],
       ),
     );
@@ -91,14 +114,23 @@ class _ControlBarState extends State<ControlBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          controlTextButton(title: "PEN"),
-          controlTextButton(title: "ERASE"),
+          controlTextButton(
+              title: "PEN",
+              drawingProvider: p,
+              controlBarFunction: ControlBarFunction.pen),
+          controlTextButton(
+              title: "ERASE",
+              drawingProvider: p,
+              controlBarFunction: ControlBarFunction.erase),
         ],
       ),
     );
   }
 
-  controlTextButton({String title}) {
+  controlTextButton(
+      {String title,
+      DrawingProvider drawingProvider,
+      ControlBarFunction controlBarFunction}) {
     if (title == null) title = "";
 
     return Container(
@@ -114,7 +146,10 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  controlIconButton({Icon icon}) {
+  controlIconButton(
+      {Icon icon,
+      DrawingProvider drawingProvider,
+      ControlBarFunction controlBarFunction}) {
     bool isIcon = true;
     if (icon == null) isIcon = false;
 
@@ -126,5 +161,30 @@ class _ControlBarState extends State<ControlBar> {
         child: isIcon ? icon : Container(),
       ),
     );
+  }
+
+  controlBarFunction({
+    ControlBarFunction controlBarFunction,
+    DrawingProvider drawingProvider,
+  }) {
+    switch (controlBarFunction) {
+      case ControlBarFunction.save:
+
+        break;
+      case ControlBarFunction.load:
+        break;
+      case ControlBarFunction.addBackGroundImage:
+        break;
+      case ControlBarFunction.backward:
+        break;
+      case ControlBarFunction.forward:
+        break;
+      case ControlBarFunction.pen:
+        drawingProvider.pencilMode();
+        break;
+      case ControlBarFunction.erase:
+        drawingProvider.eraseMode();
+        break;
+    }
   }
 }
