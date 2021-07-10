@@ -13,17 +13,35 @@ class _ControlBarState extends State<ControlBar> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 80,
+      height: 60,
       color: Colors.grey[300],
       child: Row(
-        children: [saveAndLoadButtonGroup()],
+        children: [
+          Expanded(
+            flex: 1,
+            child: _saveAndLoadButtonGroup(),
+          ),
+          Expanded(
+            flex: 1,
+            child: _setBackGroundImageButton(),
+          ),
+          Expanded(
+            flex: 1,
+            child: _backwardAndForward(),
+          ),
+          Expanded(
+            flex: 1,
+            child: _penAndEraser(),
+          )
+        ],
       ),
     );
   }
 
-  saveAndLoadButtonGroup() {
+  _saveAndLoadButtonGroup() {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           controlTextButton(title: "SAVE"),
           controlTextButton(title: "LOAD"),
@@ -32,9 +50,10 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  setBackGroundImage() {
+  _setBackGroundImageButton() {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           controlTextButton(title: "ADD"),
         ],
@@ -42,11 +61,33 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  backwardAndForward() {
+  _backwardAndForward() {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          controlTextButton(title: "ADD"),
+          controlIconButton(
+              icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          )),
+          controlIconButton(
+              icon: Icon(
+            Icons.arrow_forward,
+            color: Colors.white,
+          )),
+        ],
+      ),
+    );
+  }
+
+  _penAndEraser() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          controlTextButton(title: "PEN"),
+          controlTextButton(title: "ERASE"),
         ],
       ),
     );
@@ -57,8 +98,8 @@ class _ControlBarState extends State<ControlBar> {
 
     return Container(
       decoration: boxTheme.basicOutlineGreyBox,
-      height: 60,
-      width: 60,
+      height: 40,
+      width: 40,
       child: Center(
         child: Text(
           title,
@@ -74,10 +115,10 @@ class _ControlBarState extends State<ControlBar> {
 
     return Container(
       decoration: boxTheme.basicOutlineGreyBox,
-      height: 60,
-      width: 60,
+      height: 40,
+      width: 40,
       child: Center(
-        child: isIcon?icon:Container(),
+        child: isIcon ? icon : Container(),
       ),
     );
   }
