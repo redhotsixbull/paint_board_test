@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'drawing_page/local_utils/DrawingProvider.dart';
 
-enum ControlBarFunction {
+enum PaintBoardAction {
   save,
   load,
   addBackGroundImage,
@@ -61,11 +61,11 @@ class _ControlBarState extends State<ControlBar> {
           controlTextButton(
               title: "SAVE",
               drawingProvider: p,
-              controlBarFunction: ControlBarFunction.save),
+              paintBoardAction: PaintBoardAction.save),
           controlTextButton(
               title: "LOAD",
               drawingProvider: p,
-              controlBarFunction: ControlBarFunction.load),
+              paintBoardAction: PaintBoardAction.load),
         ],
       ),
     );
@@ -79,7 +79,7 @@ class _ControlBarState extends State<ControlBar> {
           controlTextButton(
               title: "ADD",
               drawingProvider: p,
-              controlBarFunction: ControlBarFunction.addBackGroundImage),
+              paintBoardAction: PaintBoardAction.addBackGroundImage),
         ],
       ),
     );
@@ -96,14 +96,14 @@ class _ControlBarState extends State<ControlBar> {
                 color: Colors.white,
               ),
               drawingProvider: p,
-              controlBarFunction: ControlBarFunction.backward),
+              paintBoardAction: PaintBoardAction.backward),
           controlIconButton(
               icon: Icon(
                 Icons.arrow_forward,
                 color: Colors.white,
               ),
               drawingProvider: p,
-              controlBarFunction: ControlBarFunction.forward),
+              paintBoardAction: PaintBoardAction.forward),
         ],
       ),
     );
@@ -117,11 +117,11 @@ class _ControlBarState extends State<ControlBar> {
           controlTextButton(
               title: "PEN",
               drawingProvider: p,
-              controlBarFunction: ControlBarFunction.pen),
+              paintBoardAction: PaintBoardAction.pen),
           controlTextButton(
               title: "ERASE",
               drawingProvider: p,
-              controlBarFunction: ControlBarFunction.erase),
+              paintBoardAction: PaintBoardAction.erase),
         ],
       ),
     );
@@ -130,17 +130,22 @@ class _ControlBarState extends State<ControlBar> {
   controlTextButton(
       {String title,
       DrawingProvider drawingProvider,
-      ControlBarFunction controlBarFunction}) {
+      PaintBoardAction paintBoardAction}) {
     if (title == null) title = "";
 
-    return Container(
-      decoration: boxTheme.basicOutlineGreyBox,
-      height: 40,
-      width: 40,
-      child: Center(
-        child: Text(
-          title,
-          style: textTheme.basicTextStyle,
+    return InkWell(
+      onTap: () {
+        controlBarFunction(paintBoardAction: paintBoardAction,drawingProvider: drawingProvider);
+      },
+      child: Container(
+        decoration: boxTheme.basicOutlineGreyBox,
+        height: 40,
+        width: 40,
+        child: Center(
+          child: Text(
+            title,
+            style: textTheme.basicTextStyle,
+          ),
         ),
       ),
     );
@@ -149,40 +154,44 @@ class _ControlBarState extends State<ControlBar> {
   controlIconButton(
       {Icon icon,
       DrawingProvider drawingProvider,
-      ControlBarFunction controlBarFunction}) {
+      PaintBoardAction paintBoardAction}) {
     bool isIcon = true;
     if (icon == null) isIcon = false;
 
-    return Container(
-      decoration: boxTheme.basicOutlineGreyBox,
-      height: 40,
-      width: 40,
-      child: Center(
-        child: isIcon ? icon : Container(),
+    return InkWell(
+      onTap: () {
+        controlBarFunction(paintBoardAction: paintBoardAction,drawingProvider: drawingProvider);
+      },
+      child: Container(
+        decoration: boxTheme.basicOutlineGreyBox,
+        height: 40,
+        width: 40,
+        child: Center(
+          child: isIcon ? icon : Container(),
+        ),
       ),
     );
   }
 
   controlBarFunction({
-    ControlBarFunction controlBarFunction,
+    PaintBoardAction paintBoardAction,
     DrawingProvider drawingProvider,
   }) {
-    switch (controlBarFunction) {
-      case ControlBarFunction.save:
-
+    switch (paintBoardAction) {
+      case PaintBoardAction.save:
         break;
-      case ControlBarFunction.load:
+      case PaintBoardAction.load:
         break;
-      case ControlBarFunction.addBackGroundImage:
+      case PaintBoardAction.addBackGroundImage:
         break;
-      case ControlBarFunction.backward:
+      case PaintBoardAction.backward:
         break;
-      case ControlBarFunction.forward:
+      case PaintBoardAction.forward:
         break;
-      case ControlBarFunction.pen:
+      case PaintBoardAction.pen:
         drawingProvider.pencilMode();
         break;
-      case ControlBarFunction.erase:
+      case PaintBoardAction.erase:
         drawingProvider.eraseMode();
         break;
     }
