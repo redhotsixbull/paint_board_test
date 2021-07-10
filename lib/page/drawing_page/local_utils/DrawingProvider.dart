@@ -11,12 +11,17 @@ class DrawingProvider extends ChangeNotifier {
 
   Color _color = Colors.black;
 
+  double _erasSize = 10;
+
+  double get eraseSize => _erasSize;
+
+  Color _eraseColor = ThemeData().scaffoldBackgroundColor;
+
   Color get color => _color;
 
   bool _eraseMode = false;
 
   bool get getEraseMode => _eraseMode;
-
 
   void eraseMode() {
     _eraseMode = true;
@@ -36,22 +41,41 @@ class DrawingProvider extends ChangeNotifier {
   }
 
   void drawing(Offset offset) {
-    lines.last.add(DotInfo(offset, size, color));
+    double dx = offset.dx;
+    double dy = offset.dy;
+
+    if (dy < 3) {
+      dy = 3;
+    }
+
+    Offset offSetData = Offset(dx, dy);
+
+    lines.last.add(DotInfo(offSetData, size, color));
     notifyListeners();
   }
 
-  void erase(Offset offset) {
-    final eraseGap = 15;
-    for (var oneLine in List<List<DotInfo>>.from(lines)) {
-      for (var oneDot in oneLine) {
-        if (sqrt(pow((offset.dx - oneDot.offset.dx), 2) +
-                pow((offset.dy - oneDot.offset.dy), 2)) <
-            eraseGap) {
-          lines.remove(oneLine);
-          break;
-        }
-      }
+  void eraseStart(Offset offset) {
+    var oneLine = <DotInfo>[];
+    oneLine.add(DotInfo(offset, eraseSize, _eraseColor));
+    lines.add(oneLine);
+    notifyListeners();
+  }
+
+  void erasing(Offset offset) {
+    double dx = offset.dx;
+    double dy = offset.dy;
+
+    if (dy < 10) {
+      dy = 3;
     }
+
+    Offset offSetData = Offset(dx, dy);
+    lines.last.add(DotInfo(offSetData, eraseSize, _eraseColor));
+    notifyListeners();
+  }
+
+  void backward(){
+    lines.removeLast();
     notifyListeners();
   }
 }

@@ -15,8 +15,11 @@ class _MainPageState extends State<MainPage> {
       child: Scaffold(
         body: Column(
           children: [
-            ControlBar(),
-            Expanded(flex: 1, child: PaintBoard()),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: ControlBar(),
+            ),
+            Expanded(child: PaintBoard()),
           ],
         ),
       ),
