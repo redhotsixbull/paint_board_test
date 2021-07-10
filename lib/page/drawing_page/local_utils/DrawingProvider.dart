@@ -15,10 +15,16 @@ class DrawingProvider extends ChangeNotifier {
 
   bool _eraseMode = false;
 
-  bool get eraseMode => _eraseMode;
+  bool get getEraseMode => _eraseMode;
 
-  void changeEraseMode() {
-    _eraseMode = !_eraseMode;
+
+  void eraseMode() {
+    _eraseMode = true;
+    notifyListeners();
+  }
+
+  void pencilMode() {
+    _eraseMode = false;
     notifyListeners();
   }
 
