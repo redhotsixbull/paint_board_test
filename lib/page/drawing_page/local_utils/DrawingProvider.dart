@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:paint_board_test/models/DotInfo.dart';
+import 'dart:ui' as ui show Image, Codec, instantiateImageCodec;
 
 class DrawingProvider extends ChangeNotifier {
   final lines = <List<DotInfo>>[];
@@ -23,6 +27,10 @@ class DrawingProvider extends ChangeNotifier {
   bool _eraseMode = false;
 
   bool get getEraseMode => _eraseMode;
+
+  ui.Image _image;
+
+  ui.Image get getImage => _image;
 
   void eraseMode() {
     _eraseMode = true;
@@ -91,5 +99,17 @@ class DrawingProvider extends ChangeNotifier {
       print(temp.length);
       notifyListeners();
     }
+  }
+
+  void loadImage() async {
+    ByteData bd = await rootBundle.load("assets/sampleImagees.jpg");
+
+    final Uint8List bytes = Uint8List.view(bd.buffer);
+
+    final ui.Codec codec = await ui.instantiateImageCodec(bytes);
+
+    _image = (await codec.getNextFrame()).image;
+
+    notifyListeners();
   }
 }

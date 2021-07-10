@@ -4,9 +4,8 @@ import 'package:paint_board_test/models/DotInfo.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:provider/provider.dart';
-
-import 'control_bar.dart';
 import 'drawing_page/local_utils/DrawingProvider.dart';
+import 'dart:ui' as ui show Image;
 
 class PaintBoard extends StatefulWidget {
   const PaintBoard({Key key}) : super(key: key);
@@ -26,7 +25,7 @@ class _PaintBoardState extends State<PaintBoard> {
           child: Stack(
             children: [
               CustomPaint(
-                painter: DrawingPencilPainter(lines: p.lines),
+                painter: DrawingPencilPainter(lines: p.lines, myBackground: p.getImage),
               ),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -38,10 +37,7 @@ class _PaintBoardState extends State<PaintBoard> {
                   }
                 },
                 onPanUpdate: (s) {
-
-                  if(s.localPosition.dy>0){
-                    print(s.localPosition.dx);
-                    print(s.localPosition.dy);
+                  if (s.localPosition.dy > 0) {
                     if (p.getEraseMode) {
                       p.erasing(s.localPosition);
                     } else {
@@ -60,8 +56,10 @@ class _PaintBoardState extends State<PaintBoard> {
 }
 
 class DrawingPencilPainter extends CustomPainter {
-  const DrawingPencilPainter({@required this.lines}) : assert(lines != null);
+  const DrawingPencilPainter({@required this.lines,this.myBackground}) : assert(lines != null);
   final List<List<DotInfo>> lines;
+  final ui.Image myBackground;
+
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -76,6 +74,8 @@ class DrawingPencilPainter extends CustomPainter {
         l.add(oneDot.offset);
       }
       p.addPolygon(l, false);
+
+      canvas.drawImage( myBackground, Offset.zero, Paint());
 
       canvas.drawPath(
           p,
