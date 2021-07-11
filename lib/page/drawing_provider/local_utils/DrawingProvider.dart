@@ -3,11 +3,10 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:paint_board_test/models/DotInfo.dart';
-import 'dart:ui' as ui show Image, decodeImageFromList, PictureRecorder;
+import 'dart:ui' as ui show Image, decodeImageFromList;
 import 'package:image/image.dart' as IMG;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -159,8 +158,6 @@ class DrawingProvider extends ChangeNotifier {
     Map<String, dynamic> lineListMap = lineList.toJson();
     Map<String, dynamic> tempMap = temp.toJson();
 
-    print(1);
-
     String lineListMapString = jsonEncode(LineList.fromJson(lineListMap));
     String tempMapString = jsonEncode(LineList.fromJson(tempMap));
 
@@ -171,11 +168,13 @@ class DrawingProvider extends ChangeNotifier {
     lineListAndHistory.add(tempMapString);
 
     index = prefs.getStringList("index");
-    print(2);
+
     print(index);
     if (index == null) {
       index = List<String>();
       index.add("0");
+    } else {
+      index.add(index.length.toString());
     }
 
     DateTime now = DateTime.now();
@@ -184,38 +183,33 @@ class DrawingProvider extends ChangeNotifier {
     print(formattedDate);
     String boardName = "save_";
     boardName = boardName + formattedDate;
-    print(3);
+
     prefs.setString(index.last, boardName);
     prefs.setStringList(boardName, lineListAndHistory);
-
-    index.add(index.length.toString());
 
     prefs.setStringList("index", index);
 
     notifyListeners();
   }
 
-  void loadPaintBoard() async {
+  void loadPaintBoard(String boardName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int _lineListIndex = 0;
     int _tempIndex = 1;
-    List<String> index = [];
     List<String> lineListAndHistory = [];
 
-    index = prefs.getStringList("index");
+    if(boardName != null) {
+      lineListAndHistory = prefs.getStringList(boardName);
 
-    String boardName = prefs.getString(index[0]);
+      String lineListMapString = lineListAndHistory[_lineListIndex];
+      String tempMapString = lineListAndHistory[_tempIndex];
 
-    lineListAndHistory = prefs.getStringList(boardName);
+      Map<String, dynamic> lineListMap = jsonDecode(lineListMapString);
+      Map<String, dynamic> tempMap = jsonDecode(tempMapString);
 
-    String lineListMapString = lineListAndHistory[_lineListIndex];
-    String tempMapString = lineListAndHistory[_tempIndex];
-
-    Map<String, dynamic> lineListMap = jsonDecode(lineListMapString);
-    Map<String, dynamic> tempMap = jsonDecode(tempMapString);
-
-    lineList =  LineList.fromJson(lineListMap);
-    temp = LineList.fromJson(tempMap);
-    notifyListeners();
+      lineList =  LineList.fromJson(lineListMap);
+      temp = LineList.fromJson(tempMap);
+      notifyListeners();
+    }
   }
 }

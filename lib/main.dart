@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:paint_board_test/page/drawing_page/local_utils/DrawingProvider.dart';
 import 'package:paint_board_test/page/main_page.dart';
 import 'package:provider/provider.dart';
+import 'page/drawing_provider/local_utils/DrawingProvider.dart';
 
 void main() {
   runApp(

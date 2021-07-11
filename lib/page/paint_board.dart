@@ -4,7 +4,7 @@ import 'package:paint_board_test/models/DotInfo.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:provider/provider.dart';
-import 'drawing_page/local_utils/DrawingProvider.dart';
+import 'drawing_provider/local_utils/DrawingProvider.dart';
 import 'dart:ui' as ui show Image;
 
 class PaintBoard extends StatefulWidget {

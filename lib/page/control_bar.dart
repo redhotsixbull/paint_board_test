@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:paint_board_test/common/common.dart';
+import 'package:paint_board_test/page/savelist/save_list_page.dart';
 import 'package:paint_board_test/res/theme_data.dart';
 import 'package:provider/provider.dart';
 
-import 'drawing_page/local_utils/DrawingProvider.dart';
+import 'drawing_provider/local_utils/DrawingProvider.dart';
 
 enum PaintBoardAction {
   save,
@@ -143,7 +144,7 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  _penAndEraser(DrawingProvider p, double width, double height) {
+  _penAndEraser(DrawingProvider drawingProvider, double width, double height) {
     return Container(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -151,11 +152,11 @@ class _ControlBarState extends State<ControlBar> {
         children: [
           controlTextButton(width, height,
               title: "PEN",
-              drawingProvider: p,
+              drawingProvider: drawingProvider,
               paintBoardAction: PaintBoardAction.pen),
           controlTextButton(width, height,
               title: "ERASE",
-              drawingProvider: p,
+              drawingProvider: drawingProvider,
               paintBoardAction: PaintBoardAction.erase),
         ],
       ),
@@ -168,6 +169,16 @@ class _ControlBarState extends State<ControlBar> {
       PaintBoardAction paintBoardAction}) {
     if (title == null) title = "";
 
+    bool select = false;
+
+    if(PaintBoardAction.pen == paintBoardAction && ! drawingProvider.getEraseMode){
+      select = true;
+    }
+
+    if(PaintBoardAction.erase == paintBoardAction && drawingProvider.getEraseMode){
+      select = true;
+    }
+
     return InkWell(
       onTap: () {
         controlBarFunction(width, height,
@@ -177,7 +188,7 @@ class _ControlBarState extends State<ControlBar> {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(
-          decoration: boxTheme.basicOutlineGreyBox,
+          decoration: select?boxTheme.selectOutlineBlueBox:boxTheme.basicOutlineGreyBox,
           height: 40,
           width: 40,
           child: Center(
@@ -231,33 +242,29 @@ class _ControlBarState extends State<ControlBar> {
         drawingProvider.savePaintBoard();
         break;
       case PaintBoardAction.load:
-        common.showToast("이미지를 불러왔습니다");
+        common.showToast("저장 리스트를 불러왔습니다");
         print("load image file");
-        drawingProvider.loadPaintBoard();
+        openSaveListPage(drawingProvider);
+
         break;
       case PaintBoardAction.addBackGroundImage:
-        common.showToast("배경을 설정했습니다");
         _onImageButtonPressed(
             ImageSource.gallery, drawingProvider, width, height);
         print("set background Image");
         break;
       case PaintBoardAction.backward:
-        common.showToast("back ward");
         drawingProvider.backward();
         print("click back ward button");
         break;
       case PaintBoardAction.forward:
-        common.showToast("forward");
         drawingProvider.forward();
         print("click forward button");
         break;
       case PaintBoardAction.pen:
         drawingProvider.pencilMode();
-        common.showToast("펜슬 모드");
         print("change pencil mode");
         break;
       case PaintBoardAction.erase:
-        common.showToast("지우개 모드");
         drawingProvider.eraseMode();
         print("change erase mode");
         break;
@@ -291,5 +298,14 @@ class _ControlBarState extends State<ControlBar> {
       _imageFile = pickedFile;
       drawingProvider.loadImage(width, height, _imageFile);
     } catch (e) {}
+  }
+
+  openSaveListPage(DrawingProvider drawingProvider) async {
+   String result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SaveListPage()),
+    );
+
+    drawingProvider.loadPaintBoard(result);
   }
 }
