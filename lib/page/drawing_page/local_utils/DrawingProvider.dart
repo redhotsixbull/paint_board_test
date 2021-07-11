@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:paint_board_test/models/DotInfo.dart';
-import 'dart:ui' as ui show Image, Codec, instantiateImageCodec;
+import 'dart:ui' as ui
+    show Image, Codec, instantiateImageCodec, decodeImageFromList;
+import 'package:image/image.dart' as IMG;
 
 class DrawingProvider extends ChangeNotifier {
   final lines = <List<DotInfo>>[];
@@ -31,6 +34,10 @@ class DrawingProvider extends ChangeNotifier {
   ui.Image _image;
 
   ui.Image get getImage => _image;
+
+  bool _isSetImage = false;
+
+  bool get getIsSetImage => _isSetImage;
 
   void eraseMode() {
     _eraseMode = true;
@@ -101,15 +108,34 @@ class DrawingProvider extends ChangeNotifier {
     }
   }
 
-  void loadImage() async {
-    ByteData bd = await rootBundle.load("assets/sampleImagees.jpg");
+  void loadImage(double width, double height) async {
+
+    ByteData bd = await rootBundle.load("assets/imgs/Frame9.png");
 
     final Uint8List bytes = Uint8List.view(bd.buffer);
 
-    final ui.Codec codec = await ui.instantiateImageCodec(bytes);
+    final IMG.Image image = IMG.decodeImage(bytes);
 
-    _image = (await codec.getNextFrame()).image;
+    final IMG.Image resized = IMG.copyResize(image, width:  width.toInt(), height: height.toInt());
 
+    final List<int> resizedBytes = IMG.encodePng(resized);
+
+    final Completer<ui.Image> completer = new Completer();
+
+    ui.decodeImageFromList(
+        resizedBytes, (ui.Image img) => completer.complete(img));
+    _image = await completer.future;
+
+    setImage();
+  }
+
+  void setImage() {
+    _isSetImage = true;
+    notifyListeners();
+  }
+
+  void removeBackground() {
+    _isSetImage = false;
     notifyListeners();
   }
 }

@@ -25,7 +25,10 @@ class _PaintBoardState extends State<PaintBoard> {
           child: Stack(
             children: [
               CustomPaint(
-                painter: DrawingPencilPainter(lines: p.lines, myBackground: p.getImage),
+                painter: DrawingImagePainter(myBackground: p.getImage,isSetImage: p.getIsSetImage),
+              ),
+              CustomPaint(
+                painter: DrawingPencilPainter(lines: p.lines, myBackground: p.getImage,isSetImage: p.getIsSetImage),
               ),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -56,10 +59,10 @@ class _PaintBoardState extends State<PaintBoard> {
 }
 
 class DrawingPencilPainter extends CustomPainter {
-  const DrawingPencilPainter({@required this.lines,this.myBackground}) : assert(lines != null);
+  const DrawingPencilPainter({@required this.lines,this.myBackground,this.isSetImage}) : assert(lines != null);
   final List<List<DotInfo>> lines;
   final ui.Image myBackground;
-
+  final bool isSetImage;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -75,8 +78,6 @@ class DrawingPencilPainter extends CustomPainter {
       }
       p.addPolygon(l, false);
 
-      canvas.drawImage( myBackground, Offset.zero, Paint());
-
       canvas.drawPath(
           p,
           Paint()
@@ -89,6 +90,26 @@ class DrawingPencilPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
+    //return myBackground != (oldDelegate as DrawingPencilPainter).myBackground;
     return true;
   }
+}
+
+class DrawingImagePainter extends CustomPainter {
+  const DrawingImagePainter({this.myBackground,this.isSetImage});
+  final ui.Image myBackground;
+  final bool isSetImage;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if(isSetImage){
+      canvas.drawImage( myBackground, Offset.zero, Paint());
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+
 }

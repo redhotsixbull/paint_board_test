@@ -26,6 +26,9 @@ class _ControlBarState extends State<ControlBar> {
   Widget build(BuildContext context) {
     var p = Provider.of<DrawingProvider>(context);
 
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Container(
       width: double.infinity,
       height: 60,
@@ -34,35 +37,55 @@ class _ControlBarState extends State<ControlBar> {
         children: [
           Expanded(
             flex: 1,
-            child: _saveAndLoadButtonGroup(p),
+            child: _saveAndLoadButtonGroup(
+              p,
+              width,
+              height,
+            ),
           ),
           Expanded(
             flex: 1,
-            child: _setBackGroundImageButton(p),
+            child: _setBackGroundImageButton(
+              p,
+              width,
+              height,
+            ),
           ),
           Expanded(
             flex: 1,
-            child: _backwardAndForward(p),
+            child: _backwardAndForward(
+              p,
+              width,
+              height,
+            ),
           ),
           Expanded(
             flex: 1,
-            child: _penAndEraser(p),
+            child: _penAndEraser(
+              p,
+              width,
+              height,
+            ),
           )
         ],
       ),
     );
   }
 
-  _saveAndLoadButtonGroup(DrawingProvider p) {
+  _saveAndLoadButtonGroup(
+    DrawingProvider p,
+    double width,
+    double height,
+  ) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          controlTextButton(
+          controlTextButton(width, height,
               title: "SAVE",
               drawingProvider: p,
               paintBoardAction: PaintBoardAction.save),
-          controlTextButton(
+          controlTextButton(width, height,
               title: "LOAD",
               drawingProvider: p,
               paintBoardAction: PaintBoardAction.load),
@@ -71,12 +94,16 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  _setBackGroundImageButton(DrawingProvider p) {
+  _setBackGroundImageButton(
+    DrawingProvider p,
+    double width,
+    double height,
+  ) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          controlTextButton(
+          controlTextButton(width, height,
               title: "ADD",
               drawingProvider: p,
               paintBoardAction: PaintBoardAction.addBackGroundImage),
@@ -85,19 +112,23 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  _backwardAndForward(DrawingProvider p) {
+  _backwardAndForward(
+    DrawingProvider p,
+    double width,
+    double height,
+  ) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          controlIconButton(
+          controlIconButton(width, height,
               icon: Icon(
                 Icons.arrow_back,
                 color: Colors.white,
               ),
               drawingProvider: p,
               paintBoardAction: PaintBoardAction.backward),
-          controlIconButton(
+          controlIconButton(width, height,
               icon: Icon(
                 Icons.arrow_forward,
                 color: Colors.white,
@@ -109,16 +140,16 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  _penAndEraser(DrawingProvider p) {
+  _penAndEraser(DrawingProvider p, double width, double height) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          controlTextButton(
+          controlTextButton(width, height,
               title: "PEN",
               drawingProvider: p,
               paintBoardAction: PaintBoardAction.pen),
-          controlTextButton(
+          controlTextButton(width, height,
               title: "ERASE",
               drawingProvider: p,
               paintBoardAction: PaintBoardAction.erase),
@@ -127,7 +158,7 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  controlTextButton(
+  controlTextButton(double width, double height,
       {String title,
       DrawingProvider drawingProvider,
       PaintBoardAction paintBoardAction}) {
@@ -135,7 +166,9 @@ class _ControlBarState extends State<ControlBar> {
 
     return InkWell(
       onTap: () {
-        controlBarFunction(paintBoardAction: paintBoardAction,drawingProvider: drawingProvider);
+        controlBarFunction(width, height,
+            paintBoardAction: paintBoardAction,
+            drawingProvider: drawingProvider);
       },
       child: Container(
         decoration: boxTheme.basicOutlineGreyBox,
@@ -151,7 +184,7 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  controlIconButton(
+  controlIconButton(double width, double height,
       {Icon icon,
       DrawingProvider drawingProvider,
       PaintBoardAction paintBoardAction}) {
@@ -160,7 +193,9 @@ class _ControlBarState extends State<ControlBar> {
 
     return InkWell(
       onTap: () {
-        controlBarFunction(paintBoardAction: paintBoardAction,drawingProvider: drawingProvider);
+        controlBarFunction(width, height,
+            paintBoardAction: paintBoardAction,
+            drawingProvider: drawingProvider);
       },
       child: Container(
         decoration: boxTheme.basicOutlineGreyBox,
@@ -173,7 +208,9 @@ class _ControlBarState extends State<ControlBar> {
     );
   }
 
-  controlBarFunction({
+  controlBarFunction(
+    double width,
+    double height, {
     PaintBoardAction paintBoardAction,
     DrawingProvider drawingProvider,
   }) {
@@ -183,6 +220,8 @@ class _ControlBarState extends State<ControlBar> {
       case PaintBoardAction.load:
         break;
       case PaintBoardAction.addBackGroundImage:
+        print("set background Image");
+        drawingProvider.loadImage(width, height);
         break;
       case PaintBoardAction.backward:
         print("back ward button");
