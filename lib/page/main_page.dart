@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paint_board_test/page/paint_board.dart';
+import 'package:provider/provider.dart';
 import 'control_bar.dart';
+import 'drawing_page/local_utils/DrawingProvider.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -10,6 +12,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
+    var p = Provider.of<DrawingProvider>(context);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -20,6 +24,12 @@ class _MainPageState extends State<MainPage> {
             ),
             Expanded(child: PaintBoard()),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.clear),
+          onPressed: (){
+            p.clearImage();
+          },
         ),
       ),
     );

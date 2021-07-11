@@ -5,9 +5,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:paint_board_test/models/DotInfo.dart';
-import 'dart:ui' as ui
-    show Image, decodeImageFromList,PictureRecorder,ImageByteFormat;
+import 'dart:ui' as ui show Image, decodeImageFromList, PictureRecorder;
 import 'package:image/image.dart' as IMG;
 
 class DrawingProvider extends ChangeNotifier {
@@ -141,14 +141,17 @@ class DrawingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  void saveImageFileInGallery(Uint8List bytes) async {
-
+  void saveImageFileInGallery(double width, double height) async {
     final recorder = ui.PictureRecorder();
-    final canvas = Canvas(recorder,
-        Rect.fromPoints(Offset(0.0, 0.0), Offset(200, 200)));
+    final canvas = Canvas(
+        recorder, Rect.fromPoints(Offset(0.0, -height), Offset(width, height)));
 
-    canvas.drawImage(_image, Offset.zero, Paint());
+    if (_image != null) {
+      canvas.drawImage(_image, Offset.zero, Paint());
+    } else {
+      final paint = Paint()..color = ThemeData().scaffoldBackgroundColor;
+      canvas.drawPaint(paint);
+    }
 
     for (var oneLine in lines) {
       Color color;
@@ -171,18 +174,27 @@ class DrawingProvider extends ChangeNotifier {
     }
 
     final picture = recorder.endRecording();
-    final img = await picture.toImage(200, 200);
+    final img = await picture.toImage(width.toInt(), height.toInt());
     final pngBytes = await img.toByteData(format: ImageByteFormat.png);
 
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy_MM_dd_hh_mm_ss').format(now);
+
+    print(formattedDate);
+    String imageName = "save_";
+    imageName = imageName+formattedDate;
     final result = await ImageGallerySaver.saveImage(
         pngBytes.buffer.asUint8List(),
         quality: 60,
-        name: "hello");
+        name: imageName);
 
-    // File('your-path/filename.png')
-    //     .writeAsBytesSync(pngBytes.buffer.asInt8List());
+    notifyListeners();
   }
 
+  void clearImage() {
+      temp.clear();
+      lines.clear();
+      _image = null;
+      notifyListeners();
+  }
 }
-
-

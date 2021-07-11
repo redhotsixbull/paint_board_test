@@ -217,9 +217,11 @@ class _ControlBarState extends State<ControlBar> {
   }) {
     switch (paintBoardAction) {
       case PaintBoardAction.save:
-        _onSaveImage();
+        print("save image");
+        drawingProvider.saveImageFileInGallery(width, height);
         break;
       case PaintBoardAction.load:
+        print("load image file");
         _onImageButtonPressed(
             ImageSource.gallery, drawingProvider, width, height);
         break;
@@ -275,7 +277,4 @@ class _ControlBarState extends State<ControlBar> {
     } catch (e) {}
   }
 
-  void _onSaveImage(){
-
-  }
 }
