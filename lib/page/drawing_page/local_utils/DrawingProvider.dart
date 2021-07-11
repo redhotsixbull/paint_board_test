@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -10,9 +11,9 @@ import 'dart:ui' as ui show Image, decodeImageFromList, PictureRecorder;
 import 'package:image/image.dart' as IMG;
 
 class DrawingProvider extends ChangeNotifier {
-  final lines = <List<DotInfo>>[];
+  final lineList = LineList(List<Line>());
 
-  final temp = <List<DotInfo>>[];
+  final temp =  LineList(List<Line>());
 
   double _size = 3;
 
@@ -53,7 +54,7 @@ class DrawingProvider extends ChangeNotifier {
   void drawStart(Offset offset) {
     var oneLine = <DotInfo>[];
     oneLine.add(DotInfo(offset, size, color));
-    lines.add(oneLine);
+    lineList.lines.add(Line(List<DotInfo>())..line = oneLine);
     notifyListeners();
   }
 
@@ -67,14 +68,16 @@ class DrawingProvider extends ChangeNotifier {
 
     Offset offSetData = Offset(dx, dy);
 
-    lines.last.add(DotInfo(offSetData, size, color));
+    lineList.lines.last.line.add(DotInfo(offSetData, size, color));
+
     notifyListeners();
   }
 
   void eraseStart(Offset offset) {
     var oneLine = <DotInfo>[];
-    oneLine.add(DotInfo(offset, eraseSize, _eraseColor));
-    lines.add(oneLine);
+    oneLine.add(DotInfo(offset, _eraseSize, _eraseColor));
+    lineList.lines.add(Line(List<DotInfo>())..line = oneLine);
+
     notifyListeners();
   }
 
@@ -87,26 +90,26 @@ class DrawingProvider extends ChangeNotifier {
     }
 
     Offset offSetData = Offset(dx, dy);
-    lines.last.add(DotInfo(offSetData, eraseSize, _eraseColor));
+    lineList.lines.last.line.add(DotInfo(offSetData, _eraseSize, _eraseColor));
     notifyListeners();
   }
 
   void backward() {
-    if (lines.length > 0) {
-      temp.add(lines.last);
-      lines.removeLast();
+    if (lineList.lines.length > 0) {
+      temp.lines.add(lineList.lines.last);
+      lineList.lines.removeLast();
       print("remain backward task");
-      print(lines.length);
+      print(lineList.lines.length);
       notifyListeners();
     }
   }
 
   void forward() {
-    if (temp.length > 0) {
-      lines.add(temp.last);
-      temp.removeLast();
+    if (temp.lines.length > 0) {
+      lineList.lines.add(temp.lines.last);
+      temp.lines.removeLast();
       print("remain forward task");
-      print(temp.length);
+      print(temp.lines.length);
       notifyListeners();
     }
   }
@@ -143,9 +146,18 @@ class DrawingProvider extends ChangeNotifier {
   }
 
   void clearImage() {
-      temp.clear();
-      lines.clear();
+      temp.lines.clear();
+      lineList.lines.clear();
       _image = null;
       notifyListeners();
+  }
+
+  void savePaintBoard() async {
+
+
+
+    print(lineList.toString());
+    print(temp.toString());
+
   }
 }

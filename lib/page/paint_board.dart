@@ -17,7 +17,7 @@ class PaintBoard extends StatefulWidget {
 class _PaintBoardState extends State<PaintBoard> {
   @override
   Widget build(BuildContext context) {
-    var p = Provider.of<DrawingProvider>(context);
+    var provider = Provider.of<DrawingProvider>(context);
 
     return Column(
       children: [
@@ -25,26 +25,26 @@ class _PaintBoardState extends State<PaintBoard> {
           child: Stack(
             children: [
               CustomPaint(
-                painter: DrawingImagePainter(myBackground: p.getImage),
+                painter: DrawingImagePainter(myBackground: provider.getImage),
               ),
               CustomPaint(
-                painter: DrawingPencilPainter(lines: p.lines),
+                painter: DrawingPencilPainter(lineList: provider.lineList),
               ),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onPanStart: (s) {
-                  if (p.getEraseMode) {
-                    p.eraseStart(s.localPosition);
+                  if (provider.getEraseMode) {
+                    provider.eraseStart(s.localPosition);
                   } else {
-                    p.drawStart(s.localPosition);
+                    provider.drawStart(s.localPosition);
                   }
                 },
                 onPanUpdate: (s) {
                   if (s.localPosition.dy > 0) {
-                    if (p.getEraseMode) {
-                      p.erasing(s.localPosition);
+                    if (provider.getEraseMode) {
+                      provider.erasing(s.localPosition);
                     } else {
-                      p.drawing(s.localPosition);
+                      provider.drawing(s.localPosition);
                     }
                   }
                 },
@@ -59,17 +59,17 @@ class _PaintBoardState extends State<PaintBoard> {
 }
 
 class DrawingPencilPainter extends CustomPainter {
-  const DrawingPencilPainter({@required this.lines}) : assert(lines != null);
-  final List<List<DotInfo>> lines;
+  const DrawingPencilPainter({@required this.lineList}) : assert(lineList != null);
+  final LineList lineList;
 
   @override
   void paint(Canvas canvas, Size size) {
-    for (var oneLine in lines) {
+    for (var oneLine in lineList.lines) {
       Color color;
       double size;
       var l = <Offset>[];
       var path = Path();
-      for (var oneDot in oneLine) {
+      for (var oneDot in oneLine.line) {
         color ??= oneDot.color;
         size ??= oneDot.size;
         l.add(oneDot.offset);
