@@ -26,7 +26,7 @@ class ControlBar extends StatefulWidget {
 class _ControlBarState extends State<ControlBar> {
   @override
   Widget build(BuildContext context) {
-    var p = Provider.of<DrawingProvider>(context);
+    var drawingProvider = Provider.of<DrawingProvider>(context);
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -40,7 +40,7 @@ class _ControlBarState extends State<ControlBar> {
           Expanded(
             flex: 1,
             child: _saveAndLoadButtonGroup(
-              p,
+              drawingProvider,
               width,
               height,
             ),
@@ -48,7 +48,7 @@ class _ControlBarState extends State<ControlBar> {
           Expanded(
             flex: 1,
             child: _setBackGroundImageButton(
-              p,
+              drawingProvider,
               width,
               height,
             ),
@@ -56,14 +56,14 @@ class _ControlBarState extends State<ControlBar> {
           Expanded(
             flex: 1,
             child: _backwardAndForward(
-              p,
+              drawingProvider,
               width,
               height,
             ),
           ),
           Container(
             child: _penAndEraser(
-              p,
+              drawingProvider,
               width,
               height,
             ),

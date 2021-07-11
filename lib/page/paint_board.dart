@@ -68,16 +68,16 @@ class DrawingPencilPainter extends CustomPainter {
       Color color;
       double size;
       var l = <Offset>[];
-      var p = Path();
+      var path = Path();
       for (var oneDot in oneLine) {
         color ??= oneDot.color;
         size ??= oneDot.size;
         l.add(oneDot.offset);
       }
-      p.addPolygon(l, false);
+      path.addPolygon(l, false);
 
       canvas.drawPath(
-          p,
+          path,
           Paint()
             ..color = color
             ..strokeWidth = size
