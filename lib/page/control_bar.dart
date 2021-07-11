@@ -60,8 +60,7 @@ class _ControlBarState extends State<ControlBar> {
               height,
             ),
           ),
-          Expanded(
-            flex: 1,
+          Container(
             child: _penAndEraser(
               p,
               width,
@@ -80,7 +79,8 @@ class _ControlBarState extends State<ControlBar> {
   ) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           controlTextButton(width, height,
               title: "SAVE",
@@ -102,7 +102,7 @@ class _ControlBarState extends State<ControlBar> {
   ) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           controlTextButton(width, height,
               title: "ADD",
@@ -120,7 +120,8 @@ class _ControlBarState extends State<ControlBar> {
   ) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           controlIconButton(width, height,
               icon: Icon(
@@ -144,7 +145,8 @@ class _ControlBarState extends State<ControlBar> {
   _penAndEraser(DrawingProvider p, double width, double height) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           controlTextButton(width, height,
               title: "PEN",
@@ -171,14 +173,17 @@ class _ControlBarState extends State<ControlBar> {
             paintBoardAction: paintBoardAction,
             drawingProvider: drawingProvider);
       },
-      child: Container(
-        decoration: boxTheme.basicOutlineGreyBox,
-        height: 40,
-        width: 40,
-        child: Center(
-          child: Text(
-            title,
-            style: textTheme.basicTextStyle,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          decoration: boxTheme.basicOutlineGreyBox,
+          height: 40,
+          width: 40,
+          child: Center(
+            child: Text(
+              title,
+              style: textTheme.basicTextStyle,
+            ),
           ),
         ),
       ),
@@ -198,12 +203,15 @@ class _ControlBarState extends State<ControlBar> {
             paintBoardAction: paintBoardAction,
             drawingProvider: drawingProvider);
       },
-      child: Container(
-        decoration: boxTheme.basicOutlineGreyBox,
-        height: 40,
-        width: 40,
-        child: Center(
-          child: isIcon ? icon : Container(),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          decoration: boxTheme.basicOutlineGreyBox,
+          height: 40,
+          width: 40,
+          child: Center(
+            child: isIcon ? icon : Container(),
+          ),
         ),
       ),
     );
