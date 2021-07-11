@@ -197,4 +197,10 @@ class DrawingProvider extends ChangeNotifier {
       _image = null;
       notifyListeners();
   }
+
+  void clearLine() {
+    temp.clear();
+    lines.clear();
+    notifyListeners();
+  }
 }

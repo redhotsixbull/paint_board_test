@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:paint_board_test/common/common.dart';
 import 'package:paint_board_test/res/theme_data.dart';
 import 'package:provider/provider.dart';
 
@@ -226,33 +227,40 @@ class _ControlBarState extends State<ControlBar> {
     switch (paintBoardAction) {
       case PaintBoardAction.save:
         print("save image");
+        common.showToast("저장 했습니다");
         drawingProvider.saveImageFileInGallery(width, height);
         break;
       case PaintBoardAction.load:
         print("load image file");
+        common.showToast("이미지를 불러왔습니다");
         _onImageButtonPressed(
             ImageSource.gallery, drawingProvider, width, height);
         break;
       case PaintBoardAction.addBackGroundImage:
         print("set background Image");
+        common.showToast("배경을 설정했습니다");
         _onImageButtonPressed(
             ImageSource.gallery, drawingProvider, width, height);
         //drawingProvider.loadImage(width, height);
         break;
       case PaintBoardAction.backward:
         print("back ward button");
+        common.showToast("되 돌리기");
         drawingProvider.backward();
         break;
       case PaintBoardAction.forward:
         print("forward button");
+        common.showToast("앞 돌리기?");
         drawingProvider.forward();
         break;
       case PaintBoardAction.pen:
         drawingProvider.pencilMode();
+        common.showToast("펜슬 모드");
         print("pencil mode");
         break;
       case PaintBoardAction.erase:
         drawingProvider.eraseMode();
+        common.showToast("지우개 모드");
         print("erase mode");
         break;
     }
@@ -272,17 +280,19 @@ class _ControlBarState extends State<ControlBar> {
     } else {}
   }
 
-  void _onImageButtonPressed(ImageSource source,
-      DrawingProvider drawingProvider, double width, double height,
-      ) async {
+  void _onImageButtonPressed(
+    ImageSource source,
+    DrawingProvider drawingProvider,
+    double width,
+    double height,
+  ) async {
     try {
       final pickedFile = await _picker.getImage(
         source: source,
       );
       _imageFile = pickedFile;
-
+      drawingProvider.clearLine();
       drawingProvider.loadImage(width, height, _imageFile);
     } catch (e) {}
   }
-
 }
