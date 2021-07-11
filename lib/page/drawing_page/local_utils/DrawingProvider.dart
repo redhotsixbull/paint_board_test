@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:paint_board_test/models/DotInfo.dart';
 import 'dart:ui' as ui
     show Image, Codec, instantiateImageCodec, decodeImageFromList;
@@ -108,15 +109,15 @@ class DrawingProvider extends ChangeNotifier {
     }
   }
 
-  void loadImage(double width, double height) async {
-
-    ByteData bd = await rootBundle.load("assets/imgs/Frame9.png");
+  void loadImage(double width, double height, PickedFile imageFile) async {
+    Uint8List bd = await imageFile.readAsBytes();
 
     final Uint8List bytes = Uint8List.view(bd.buffer);
 
     final IMG.Image image = IMG.decodeImage(bytes);
 
-    final IMG.Image resized = IMG.copyResize(image, width:  width.toInt(), height: height.toInt());
+    final IMG.Image resized =
+        IMG.copyResize(image, width: width.toInt(), height: height.toInt());
 
     final List<int> resizedBytes = IMG.encodePng(resized);
 

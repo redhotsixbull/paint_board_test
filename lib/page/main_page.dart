@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:paint_board_test/page/paint_board.dart';
+import 'package:video_player/video_player.dart';
 
 import 'control_bar.dart';
 

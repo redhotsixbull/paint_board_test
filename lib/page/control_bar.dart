@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:paint_board_test/res/theme_data.dart';
 import 'package:provider/provider.dart';
 
@@ -221,7 +222,10 @@ class _ControlBarState extends State<ControlBar> {
         break;
       case PaintBoardAction.addBackGroundImage:
         print("set background Image");
-        drawingProvider.loadImage(width, height);
+        _onImageButtonPressed(
+            ImageSource.gallery, drawingProvider, width, height,
+            context: context);
+        //drawingProvider.loadImage(width, height);
         break;
       case PaintBoardAction.backward:
         print("back ward button");
@@ -240,5 +244,32 @@ class _ControlBarState extends State<ControlBar> {
         print("erase mode");
         break;
     }
+  }
+
+  PickedFile _imageFile;
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> retrieveLostData() async {
+    final LostData response = await _picker.getLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      _imageFile = response.file;
+    } else {}
+  }
+
+  void _onImageButtonPressed(ImageSource source,
+      DrawingProvider drawingProvider, double width, double height,
+      {BuildContext context}) async {
+    try {
+      final pickedFile = await _picker.getImage(
+        source: source,
+      );
+      _imageFile = pickedFile;
+
+      drawingProvider.loadImage(width, height, _imageFile);
+    } catch (e) {}
   }
 }
