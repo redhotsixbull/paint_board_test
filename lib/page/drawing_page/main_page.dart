@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:paint_board_test/page/paint_board.dart';
+import 'package:paint_board_test/page/drawing_page/paint_board.dart';
 import 'package:provider/provider.dart';
 import 'control_bar.dart';
-import 'drawing_provider/local_utils/DrawingProvider.dart';
+import '../drawing_provider/drawing_provider.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -26,9 +26,10 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          tooltip: "초기화 버튼",
           child: Icon(Icons.clear),
           onPressed: () {
-            p.clearImage();
+            p.resetBoard();
           },
         ),
       ),

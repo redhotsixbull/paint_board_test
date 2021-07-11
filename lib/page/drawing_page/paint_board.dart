@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:paint_board_test/models/DotInfo.dart';
+import 'package:paint_board_test/models/dot_info.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:provider/provider.dart';
-import 'drawing_provider/local_utils/DrawingProvider.dart';
+import '../drawing_provider/drawing_provider.dart';
 import 'dart:ui' as ui show Image;
 
 class PaintBoard extends StatefulWidget {
@@ -28,7 +28,7 @@ class _PaintBoardState extends State<PaintBoard> {
                 painter: DrawingImagePainter(myBackground: provider.getImage),
               ),
               CustomPaint(
-                painter: DrawingPencilPainter(lineList: provider.lineList),
+                painter: DrawingPencilPainter(lineList: provider.backwardHistory),
               ),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -60,7 +60,7 @@ class _PaintBoardState extends State<PaintBoard> {
 
 class DrawingPencilPainter extends CustomPainter {
   const DrawingPencilPainter({@required this.lineList}) : assert(lineList != null);
-  final LineList lineList;
+  final BoardData lineList;
 
   @override
   void paint(Canvas canvas, Size size) {

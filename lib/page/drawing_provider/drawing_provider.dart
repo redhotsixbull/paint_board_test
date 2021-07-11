@@ -5,15 +5,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:paint_board_test/models/DotInfo.dart';
+import 'package:paint_board_test/models/dot_info.dart';
 import 'dart:ui' as ui show Image, decodeImageFromList;
 import 'package:image/image.dart' as IMG;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawingProvider extends ChangeNotifier {
-  var lineList = LineList(List<Line>());
-
-  var temp = LineList(List<Line>());
+  var backwardHistory = BoardData(List<Line>());
+  var forwardHistory = BoardData(List<Line>());
 
   double _size = 3;
 
@@ -37,9 +36,6 @@ class DrawingProvider extends ChangeNotifier {
 
   ui.Image get getImage => _image;
 
-  bool _isSetImage = false;
-
-  bool get getIsSetImage => _isSetImage;
 
   void eraseMode() {
     _eraseMode = true;
@@ -54,7 +50,7 @@ class DrawingProvider extends ChangeNotifier {
   void drawStart(Offset offset) {
     var oneLine = <DotInfo>[];
     oneLine.add(DotInfo(offset, size, color));
-    lineList.lines.add(Line(List<DotInfo>())..line = oneLine);
+    backwardHistory.lines.add(Line(List<DotInfo>())..line = oneLine);
     notifyListeners();
   }
 
@@ -62,13 +58,13 @@ class DrawingProvider extends ChangeNotifier {
     double dx = offset.dx;
     double dy = offset.dy;
 
-    if (dy < 3) {
-      dy = 3;
+    if (dy < size) {
+      dy = _size;
     }
 
     Offset offSetData = Offset(dx, dy);
 
-    lineList.lines.last.line.add(DotInfo(offSetData, size, color));
+    backwardHistory.lines.last.line.add(DotInfo(offSetData, size, color));
 
     notifyListeners();
   }
@@ -76,7 +72,7 @@ class DrawingProvider extends ChangeNotifier {
   void eraseStart(Offset offset) {
     var oneLine = <DotInfo>[];
     oneLine.add(DotInfo(offset, _eraseSize, _eraseColor));
-    lineList.lines.add(Line(List<DotInfo>())..line = oneLine);
+    backwardHistory.lines.add(Line(List<DotInfo>())..line = oneLine);
 
     notifyListeners();
   }
@@ -85,31 +81,31 @@ class DrawingProvider extends ChangeNotifier {
     double dx = offset.dx;
     double dy = offset.dy;
 
-    if (dy < 10) {
-      dy = 3;
+    if (dy < _eraseSize) {
+      dy = _size;
     }
 
     Offset offSetData = Offset(dx, dy);
-    lineList.lines.last.line.add(DotInfo(offSetData, _eraseSize, _eraseColor));
+    backwardHistory.lines.last.line.add(DotInfo(offSetData, _eraseSize, _eraseColor));
     notifyListeners();
   }
 
   void backward() {
-    if (lineList.lines.length > 0) {
-      temp.lines.add(lineList.lines.last);
-      lineList.lines.removeLast();
+    if (backwardHistory.lines.length > 0) {
+      forwardHistory.lines.add(backwardHistory.lines.last);
+      backwardHistory.lines.removeLast();
       print("remain backward task");
-      print(lineList.lines.length);
+      print(backwardHistory.lines.length);
       notifyListeners();
     }
   }
 
   void forward() {
-    if (temp.lines.length > 0) {
-      lineList.lines.add(temp.lines.last);
-      temp.lines.removeLast();
+    if (forwardHistory.lines.length > 0) {
+      backwardHistory.lines.add(forwardHistory.lines.last);
+      forwardHistory.lines.removeLast();
       print("remain forward task");
-      print(temp.lines.length);
+      print(forwardHistory.lines.length);
       notifyListeners();
     }
   }
@@ -131,23 +127,17 @@ class DrawingProvider extends ChangeNotifier {
     ui.decodeImageFromList(
         resizedBytes, (ui.Image img) => completer.complete(img));
     _image = await completer.future;
-
-    setImage();
-  }
-
-  void setImage() {
-    _isSetImage = true;
     notifyListeners();
   }
 
-  void removeBackground() {
-    _isSetImage = false;
+  void resetBoard() {
+    forwardHistory.lines.clear();
+    backwardHistory.lines.clear();
+    removeBackgroundImage();
     notifyListeners();
   }
 
-  void clearImage() {
-    temp.lines.clear();
-    lineList.lines.clear();
+  void removeBackgroundImage(){
     _image = null;
     notifyListeners();
   }
@@ -155,21 +145,22 @@ class DrawingProvider extends ChangeNotifier {
   void savePaintBoard() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Map<String, dynamic> lineListMap = lineList.toJson();
-    Map<String, dynamic> tempMap = temp.toJson();
+    //json to String
+    Map<String, dynamic> backWardHistoryMap = backwardHistory.toJson();
+    Map<String, dynamic> forwardHistoryMap = forwardHistory.toJson();
 
-    String lineListMapString = jsonEncode(LineList.fromJson(lineListMap));
-    String tempMapString = jsonEncode(LineList.fromJson(tempMap));
+    //json to String
+    String backwardMapString = jsonEncode(BoardData.fromJson(backWardHistoryMap));
+    String forwardMapString = jsonEncode(BoardData.fromJson(forwardHistoryMap));
 
     List<String> index = List<String>();
     List<String> lineListAndHistory = [];
 
-    lineListAndHistory.add(lineListMapString);
-    lineListAndHistory.add(tempMapString);
+    lineListAndHistory.add(backwardMapString);
+    lineListAndHistory.add(forwardMapString);
 
     index = prefs.getStringList("index");
 
-    print(index);
     if (index == null) {
       index = List<String>();
       index.add("0");
@@ -197,8 +188,13 @@ class DrawingProvider extends ChangeNotifier {
     int _lineListIndex = 0;
     int _tempIndex = 1;
     List<String> lineListAndHistory = [];
+    bool cancelSelect=true;
 
     if(boardName != null) {
+      cancelSelect = false;
+    }
+
+    if(!cancelSelect) {
       lineListAndHistory = prefs.getStringList(boardName);
 
       String lineListMapString = lineListAndHistory[_lineListIndex];
@@ -207,9 +203,13 @@ class DrawingProvider extends ChangeNotifier {
       Map<String, dynamic> lineListMap = jsonDecode(lineListMapString);
       Map<String, dynamic> tempMap = jsonDecode(tempMapString);
 
-      lineList =  LineList.fromJson(lineListMap);
-      temp = LineList.fromJson(tempMap);
+      backwardHistory =  BoardData.fromJson(lineListMap);
+      forwardHistory = BoardData.fromJson(tempMap);
+
+      removeBackgroundImage();
       notifyListeners();
     }
   }
+
+
 }

@@ -5,7 +5,7 @@ import 'package:paint_board_test/page/savelist/save_list_page.dart';
 import 'package:paint_board_test/res/theme_data.dart';
 import 'package:provider/provider.dart';
 
-import 'drawing_provider/local_utils/DrawingProvider.dart';
+import '../drawing_provider/drawing_provider.dart';
 
 enum PaintBoardAction {
   save,
@@ -171,11 +171,13 @@ class _ControlBarState extends State<ControlBar> {
 
     bool select = false;
 
-    if(PaintBoardAction.pen == paintBoardAction && ! drawingProvider.getEraseMode){
+    if (PaintBoardAction.pen == paintBoardAction &&
+        !drawingProvider.getEraseMode) {
       select = true;
     }
 
-    if(PaintBoardAction.erase == paintBoardAction && drawingProvider.getEraseMode){
+    if (PaintBoardAction.erase == paintBoardAction &&
+        drawingProvider.getEraseMode) {
       select = true;
     }
 
@@ -188,7 +190,9 @@ class _ControlBarState extends State<ControlBar> {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(
-          decoration: select?boxTheme.selectOutlineBlueBox:boxTheme.basicOutlineGreyBox,
+          decoration: select
+              ? boxTheme.selectOutlineBlueBox
+              : boxTheme.basicOutlineGreyBox,
           height: 40,
           width: 40,
           child: Center(
@@ -275,16 +279,6 @@ class _ControlBarState extends State<ControlBar> {
 
   final ImagePicker _picker = ImagePicker();
 
-  Future<void> retrieveLostData() async {
-    final LostData response = await _picker.getLostData();
-    if (response.isEmpty) {
-      return;
-    }
-    if (response.file != null) {
-      _imageFile = response.file;
-    } else {}
-  }
-
   void _onImageButtonPressed(
     ImageSource source,
     DrawingProvider drawingProvider,
@@ -301,11 +295,11 @@ class _ControlBarState extends State<ControlBar> {
   }
 
   openSaveListPage(DrawingProvider drawingProvider) async {
-   String result = await Navigator.push(
+    String boardName = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SaveListPage()),
     );
 
-    drawingProvider.loadPaintBoard(result);
+    drawingProvider.loadPaintBoard(boardName);
   }
 }

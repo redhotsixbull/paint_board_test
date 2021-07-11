@@ -10,8 +10,8 @@ class SaveListPage extends StatefulWidget {
 }
 
 class _SaveListPageState extends State<SaveListPage> {
-
   Future<SaveBoardList> _future;
+
   @override
   void initState() {
     super.initState();
@@ -20,17 +20,28 @@ class _SaveListPageState extends State<SaveListPage> {
 
   Future<SaveBoardList> loadJsonData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    SaveBoardList saveBoardList;
+    List<String> indexList;
 
-    SaveBoardList saveBoardList = SaveBoardList(List<SaveBoard>());
+    indexList = setIndexInIndexList(prefs);
 
+    saveBoardList = setSaveBoardListInSaveBoard(indexList, prefs);
+
+    return saveBoardList;
+  }
+
+  setIndexInIndexList(SharedPreferences prefs) {
     List<String> indexList = List<String>();
     indexList = prefs.getStringList("index");
+    return indexList;
+  }
 
+  setSaveBoardListInSaveBoard(List<String> indexList, SharedPreferences prefs) {
+    SaveBoardList saveBoardList = SaveBoardList(List<SaveBoard>());
     for (var index in indexList) {
       String boardName = prefs.getString(indexList[int.parse(index)]);
       saveBoardList.list.add(SaveBoard(index, boardName));
     }
-
     return saveBoardList;
   }
 
@@ -38,30 +49,30 @@ class _SaveListPageState extends State<SaveListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<SaveBoardList>(
-          future: _future, builder: (context, snapshot) {
-        if (snapshot.hasData) {
+          future: _future,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data.list.length,
+                  itemBuilder: (BuildContext context, index) {
+                    String indexTitle = snapshot.data.list[index].index;
+                    String boardName = snapshot.data.list[index].boardName;
 
-          return ListView.builder(
-              itemCount:snapshot.data.list.length,
-              itemBuilder: (BuildContext context, index) {
-                String indexTitle = snapshot.data.list[index].index;
-                String boardName = snapshot.data.list[index].boardName;
+                    if (indexTitle == null) indexTitle = "";
+                    if (boardName == null) boardName = "";
 
-                if(indexTitle == null) indexTitle ="";
-                if(boardName == null) boardName ="";
-
-                return ListTile(
-                  onTap: (){
-                    Navigator.of(context).pop(boardName);
-                  },
-                  title: Text(indexTitle),
-                  subtitle: Text(boardName),
-                );
-              });
-        } else {
-          return CircularProgressIndicator();
-        }
-      }),
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop(boardName);
+                      },
+                      title: Text(indexTitle),
+                      subtitle: Text(boardName),
+                    );
+                  });
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 }

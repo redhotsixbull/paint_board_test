@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 
-class LineList {
+class BoardData {
   List<Line> lines;
-  LineList(this.lines);
+  List<String> imageFilePath; //TODO 이미지 파일 경로 까지 되돌리기를 구현하려면 사용
 
-  LineList.fromJson(Map<String, dynamic> json) {
+  BoardData(this.lines);
+
+  BoardData.fromJson(Map<String, dynamic> json) {
     if (json['lines'] != null) {
       lines = new List<Line>();
       json['lines'].forEach((v) {
         lines.add(new Line.fromJson(v));
+      });
+    }
+
+    if (json['imageFilePath'] != null) {
+      imageFilePath = new List<String>();
+      json['imageFilePath'].forEach((v) {
+        imageFilePath.add(v);
       });
     }
   }
