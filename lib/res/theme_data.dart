@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class BoxTheme {
   final BoxDecoration basicOutlineGreyBox = BoxDecoration(
       color: Colors.grey[400], borderRadius: BorderRadius.circular(8));
+
+  final BoxDecoration selectOutlineBlueBox = BoxDecoration(
+      color: Colors.blue[400], borderRadius: BorderRadius.circular(8));
 }
 
 class TextTheme {
