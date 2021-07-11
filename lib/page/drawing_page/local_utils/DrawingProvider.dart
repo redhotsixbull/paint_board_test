@@ -1,12 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
-
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:paint_board_test/models/DotInfo.dart';
 import 'dart:ui' as ui
-    show Image, Codec, instantiateImageCodec, decodeImageFromList;
+    show Image, decodeImageFromList,PictureRecorder,ImageByteFormat;
 import 'package:image/image.dart' as IMG;
 
 class DrawingProvider extends ChangeNotifier {
@@ -139,4 +140,49 @@ class DrawingProvider extends ChangeNotifier {
     _isSetImage = false;
     notifyListeners();
   }
+
+
+  void saveImageFileInGallery(Uint8List bytes) async {
+
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder,
+        Rect.fromPoints(Offset(0.0, 0.0), Offset(200, 200)));
+
+    canvas.drawImage(_image, Offset.zero, Paint());
+
+    for (var oneLine in lines) {
+      Color color;
+      double size;
+      var l = <Offset>[];
+      var p = Path();
+      for (var oneDot in oneLine) {
+        color ??= oneDot.color;
+        size ??= oneDot.size;
+        l.add(oneDot.offset);
+      }
+      p.addPolygon(l, false);
+      canvas.drawPath(
+          p,
+          Paint()
+            ..color = color
+            ..strokeWidth = size
+            ..strokeCap = StrokeCap.round
+            ..style = PaintingStyle.stroke);
+    }
+
+    final picture = recorder.endRecording();
+    final img = await picture.toImage(200, 200);
+    final pngBytes = await img.toByteData(format: ImageByteFormat.png);
+
+    final result = await ImageGallerySaver.saveImage(
+        pngBytes.buffer.asUint8List(),
+        quality: 60,
+        name: "hello");
+
+    // File('your-path/filename.png')
+    //     .writeAsBytesSync(pngBytes.buffer.asInt8List());
+  }
+
 }
+
+

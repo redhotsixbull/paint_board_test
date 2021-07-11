@@ -90,7 +90,6 @@ class DrawingPencilPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    //return myBackground != (oldDelegate as DrawingPencilPainter).myBackground;
     return true;
   }
 }
@@ -109,7 +108,7 @@ class DrawingImagePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+    return myBackground != (oldDelegate as DrawingPencilPainter).myBackground;
   }
 
 }

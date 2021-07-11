@@ -217,14 +217,16 @@ class _ControlBarState extends State<ControlBar> {
   }) {
     switch (paintBoardAction) {
       case PaintBoardAction.save:
+        _onSaveImage();
         break;
       case PaintBoardAction.load:
+        _onImageButtonPressed(
+            ImageSource.gallery, drawingProvider, width, height);
         break;
       case PaintBoardAction.addBackGroundImage:
         print("set background Image");
         _onImageButtonPressed(
-            ImageSource.gallery, drawingProvider, width, height,
-            context: context);
+            ImageSource.gallery, drawingProvider, width, height);
         //drawingProvider.loadImage(width, height);
         break;
       case PaintBoardAction.backward:
@@ -262,7 +264,7 @@ class _ControlBarState extends State<ControlBar> {
 
   void _onImageButtonPressed(ImageSource source,
       DrawingProvider drawingProvider, double width, double height,
-      {BuildContext context}) async {
+      ) async {
     try {
       final pickedFile = await _picker.getImage(
         source: source,
@@ -271,5 +273,9 @@ class _ControlBarState extends State<ControlBar> {
 
       drawingProvider.loadImage(width, height, _imageFile);
     } catch (e) {}
+  }
+
+  void _onSaveImage(){
+
   }
 }
