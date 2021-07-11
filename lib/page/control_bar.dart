@@ -228,10 +228,12 @@ class _ControlBarState extends State<ControlBar> {
       case PaintBoardAction.save:
         common.showToast("저장 했습니다");
         print("save image");
+        drawingProvider.savePaintBoard();
         break;
       case PaintBoardAction.load:
         common.showToast("이미지를 불러왔습니다");
         print("load image file");
+        drawingProvider.loadPaintBoard();
         break;
       case PaintBoardAction.addBackGroundImage:
         common.showToast("배경을 설정했습니다");

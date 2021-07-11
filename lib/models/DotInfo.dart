@@ -48,7 +48,6 @@ class Line {
 
 class DotInfo {
   DotInfo(this.offset, this.size, this.color);
-
   Offset offset;
   double size;
   Color color;
@@ -59,7 +58,7 @@ class DotInfo {
 
     offset = Offset(dx,dy);
     size = json['size'];
-    color = json['color'];
+    color = Color.fromRGBO(json['red'], json['red'], json['red'], json['opacity']);
   }
 
   Map<String, dynamic> toJson() {
@@ -67,7 +66,10 @@ class DotInfo {
     data['dx'] = this.offset.dx.toDouble();
     data['dy'] = this.offset.dy.toDouble();
     data['size'] = this.size.toDouble();
-    data['color'] = this.color.toString();
+    data['red'] = this.color.red;
+    data['green'] = this.color.green;
+    data['blue'] = this.color.blue;
+    data['opacity'] = this.color.opacity;
     return data;
   }
 }
