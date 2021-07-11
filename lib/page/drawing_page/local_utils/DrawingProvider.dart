@@ -142,66 +142,10 @@ class DrawingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveImageFileInGallery(double width, double height) async {
-    final recorder = ui.PictureRecorder();
-    final canvas = Canvas(
-        recorder, Rect.fromPoints(Offset(0.0, -height), Offset(width, height)));
-
-    if (_image != null) {
-      canvas.drawImage(_image, Offset.zero, Paint());
-    } else {
-      final paint = Paint()..color = ThemeData().scaffoldBackgroundColor;
-      canvas.drawPaint(paint);
-    }
-
-    for (var oneLine in lines) {
-      Color color;
-      double size;
-      var l = <Offset>[];
-      var p = Path();
-      for (var oneDot in oneLine) {
-        color ??= oneDot.color;
-        size ??= oneDot.size;
-        l.add(oneDot.offset);
-      }
-      p.addPolygon(l, false);
-      canvas.drawPath(
-          p,
-          Paint()
-            ..color = color
-            ..strokeWidth = size
-            ..strokeCap = StrokeCap.round
-            ..style = PaintingStyle.stroke);
-    }
-
-    final picture = recorder.endRecording();
-    final img = await picture.toImage(width.toInt(), height.toInt());
-    final pngBytes = await img.toByteData(format: ImageByteFormat.png);
-
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyy_MM_dd_hh_mm_ss').format(now);
-
-    print(formattedDate);
-    String imageName = "save_";
-    imageName = imageName+formattedDate;
-    final result = await ImageGallerySaver.saveImage(
-        pngBytes.buffer.asUint8List(),
-        quality: 60,
-        name: imageName);
-
-    notifyListeners();
-  }
-
   void clearImage() {
       temp.clear();
       lines.clear();
       _image = null;
       notifyListeners();
-  }
-
-  void clearLine() {
-    temp.clear();
-    lines.clear();
-    notifyListeners();
   }
 }

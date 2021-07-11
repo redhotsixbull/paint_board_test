@@ -227,13 +227,10 @@ class _ControlBarState extends State<ControlBar> {
     switch (paintBoardAction) {
       case PaintBoardAction.save:
         common.showToast("저장 했습니다");
-        drawingProvider.saveImageFileInGallery(width, height);
         print("save image");
         break;
       case PaintBoardAction.load:
         common.showToast("이미지를 불러왔습니다");
-        _onImageButtonPressed(
-            ImageSource.gallery, drawingProvider, width, height);
         print("load image file");
         break;
       case PaintBoardAction.addBackGroundImage:
@@ -290,7 +287,6 @@ class _ControlBarState extends State<ControlBar> {
         source: source,
       );
       _imageFile = pickedFile;
-      drawingProvider.clearLine();
       drawingProvider.loadImage(width, height, _imageFile);
     } catch (e) {}
   }
