@@ -226,42 +226,41 @@ class _ControlBarState extends State<ControlBar> {
   }) {
     switch (paintBoardAction) {
       case PaintBoardAction.save:
-        print("save image");
         common.showToast("저장 했습니다");
         drawingProvider.saveImageFileInGallery(width, height);
+        print("save image");
         break;
       case PaintBoardAction.load:
-        print("load image file");
         common.showToast("이미지를 불러왔습니다");
         _onImageButtonPressed(
             ImageSource.gallery, drawingProvider, width, height);
+        print("load image file");
         break;
       case PaintBoardAction.addBackGroundImage:
-        print("set background Image");
         common.showToast("배경을 설정했습니다");
         _onImageButtonPressed(
             ImageSource.gallery, drawingProvider, width, height);
-        //drawingProvider.loadImage(width, height);
+        print("set background Image");
         break;
       case PaintBoardAction.backward:
-        print("back ward button");
-        common.showToast("되 돌리기");
+        common.showToast("back ward");
         drawingProvider.backward();
+        print("click back ward button");
         break;
       case PaintBoardAction.forward:
-        print("forward button");
-        common.showToast("앞 돌리기?");
+        common.showToast("forward");
         drawingProvider.forward();
+        print("click forward button");
         break;
       case PaintBoardAction.pen:
         drawingProvider.pencilMode();
         common.showToast("펜슬 모드");
-        print("pencil mode");
+        print("change pencil mode");
         break;
       case PaintBoardAction.erase:
-        drawingProvider.eraseMode();
         common.showToast("지우개 모드");
-        print("erase mode");
+        drawingProvider.eraseMode();
+        print("change erase mode");
         break;
     }
   }

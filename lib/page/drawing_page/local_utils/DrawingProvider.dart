@@ -21,9 +21,9 @@ class DrawingProvider extends ChangeNotifier {
 
   Color _color = Colors.black;
 
-  double _erasSize = 10;
+  double _eraseSize = 10;
 
-  double get eraseSize => _erasSize;
+  double get eraseSize => _eraseSize;
 
   Color _eraseColor = ThemeData().scaffoldBackgroundColor;
 
@@ -96,6 +96,7 @@ class DrawingProvider extends ChangeNotifier {
     if (lines.length > 0) {
       temp.add(lines.last);
       lines.removeLast();
+      print("remain backward task");
       print(lines.length);
       notifyListeners();
     }
@@ -105,6 +106,7 @@ class DrawingProvider extends ChangeNotifier {
     if (temp.length > 0) {
       lines.add(temp.last);
       temp.removeLast();
+      print("remain forward task");
       print(temp.length);
       notifyListeners();
     }

@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> {
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.clear),
-          onPressed: (){
+          onPressed: () {
             p.clearImage();
           },
         ),

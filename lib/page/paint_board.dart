@@ -93,14 +93,16 @@ class DrawingPencilPainter extends CustomPainter {
 }
 
 class DrawingImagePainter extends CustomPainter {
-  const DrawingImagePainter({this.myBackground,});
+  const DrawingImagePainter({
+    this.myBackground,
+  });
+
   final ui.Image myBackground;
 
   @override
   void paint(Canvas canvas, Size size) {
-
-    if(myBackground != null){
-      canvas.drawImage( myBackground, Offset.zero, Paint());
+    if (myBackground != null) {
+      canvas.drawImage(myBackground, Offset.zero, Paint());
     }
   }
 
@@ -108,5 +110,4 @@ class DrawingImagePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
-
 }

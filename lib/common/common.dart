@@ -8,8 +8,10 @@ class Common {
   }
 
   pagePushRoute(BuildContext context, String pageName, Object argument) async {
-   return await Navigator.of(context).pushNamed("/$pageName", arguments: argument);
+    return await Navigator.of(context)
+        .pushNamed("/$pageName", arguments: argument);
   }
+
   //toastMsg
   showToast(String msg) {
     Fluttertoast.showToast(
