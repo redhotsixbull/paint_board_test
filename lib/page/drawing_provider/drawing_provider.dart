@@ -36,7 +36,6 @@ class DrawingProvider extends ChangeNotifier {
 
   ui.Image get getImage => _image;
 
-
   void eraseMode() {
     _eraseMode = true;
     notifyListeners();
@@ -86,7 +85,8 @@ class DrawingProvider extends ChangeNotifier {
     }
 
     Offset offSetData = Offset(dx, dy);
-    backwardHistory.lines.last.line.add(DotInfo(offSetData, _eraseSize, _eraseColor));
+    backwardHistory.lines.last.line
+        .add(DotInfo(offSetData, _eraseSize, _eraseColor));
     notifyListeners();
   }
 
@@ -137,7 +137,7 @@ class DrawingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeBackgroundImage(){
+  void removeBackgroundImage() {
     _image = null;
     notifyListeners();
   }
@@ -150,7 +150,8 @@ class DrawingProvider extends ChangeNotifier {
     Map<String, dynamic> forwardHistoryMap = forwardHistory.toJson();
 
     //json to String
-    String backwardMapString = jsonEncode(BoardData.fromJson(backWardHistoryMap));
+    String backwardMapString =
+        jsonEncode(BoardData.fromJson(backWardHistoryMap));
     String forwardMapString = jsonEncode(BoardData.fromJson(forwardHistoryMap));
 
     List<String> index = List<String>();
@@ -188,13 +189,13 @@ class DrawingProvider extends ChangeNotifier {
     int _lineListIndex = 0;
     int _tempIndex = 1;
     List<String> lineListAndHistory = [];
-    bool cancelSelect=true;
+    bool cancelSelect = true;
 
-    if(boardName != null) {
+    if (boardName != null) {
       cancelSelect = false;
     }
 
-    if(!cancelSelect) {
+    if (!cancelSelect) {
       lineListAndHistory = prefs.getStringList(boardName);
 
       String lineListMapString = lineListAndHistory[_lineListIndex];
@@ -203,13 +204,11 @@ class DrawingProvider extends ChangeNotifier {
       Map<String, dynamic> lineListMap = jsonDecode(lineListMapString);
       Map<String, dynamic> tempMap = jsonDecode(tempMapString);
 
-      backwardHistory =  BoardData.fromJson(lineListMap);
+      backwardHistory = BoardData.fromJson(lineListMap);
       forwardHistory = BoardData.fromJson(tempMap);
 
       removeBackgroundImage();
       notifyListeners();
     }
   }
-
-
 }

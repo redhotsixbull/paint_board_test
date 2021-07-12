@@ -1,5 +1,6 @@
 class SaveBoardList {
   List<SaveBoard> list;
+
   SaveBoardList(this.list);
 }
 

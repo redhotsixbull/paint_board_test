@@ -28,7 +28,8 @@ class _PaintBoardState extends State<PaintBoard> {
                 painter: DrawingImagePainter(myBackground: provider.getImage),
               ),
               CustomPaint(
-                painter: DrawingPencilPainter(lineList: provider.backwardHistory),
+                painter:
+                    DrawingPencilPainter(lineList: provider.backwardHistory),
               ),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -59,7 +60,8 @@ class _PaintBoardState extends State<PaintBoard> {
 }
 
 class DrawingPencilPainter extends CustomPainter {
-  const DrawingPencilPainter({@required this.lineList}) : assert(lineList != null);
+  const DrawingPencilPainter({@required this.lineList})
+      : assert(lineList != null);
   final BoardData lineList;
 
   @override

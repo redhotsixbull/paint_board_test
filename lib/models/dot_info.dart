@@ -29,11 +29,11 @@ class BoardData {
     }
     return data;
   }
-
 }
 
 class Line {
   List<DotInfo> line;
+
   Line(this.line);
 
   Line.fromJson(Map<String, dynamic> json) {
@@ -52,11 +52,11 @@ class Line {
     }
     return data;
   }
-
 }
 
 class DotInfo {
   DotInfo(this.offset, this.size, this.color);
+
   Offset offset;
   double size;
   Color color;
@@ -65,9 +65,10 @@ class DotInfo {
     double dx = json['dx'];
     double dy = json['dy'];
 
-    offset = Offset(dx,dy);
+    offset = Offset(dx, dy);
     size = json['size'];
-    color = Color.fromRGBO(json['red'], json['red'], json['red'], json['opacity']);
+    color =
+        Color.fromRGBO(json['red'], json['red'], json['red'], json['opacity']);
   }
 
   Map<String, dynamic> toJson() {
